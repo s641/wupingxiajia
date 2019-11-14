@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<script type="text/javascript" src="js/data.js"></script>
+		<script type="text/javascript" src="js/jQuery.js"></script>
+		<title></title>
+		<style type="text/css">
+			
+			@keyframes lr{
+				0%{
+					transform: translateX(0);
+				}
+				5%{
+					transform: translateX(-40px);
+				}
+				10%{
+					transform: translateX(40px);
+				}
+				15%{
+					transform: translateX(-27px);
+				}
+				20%{
+					transform: translateX(27px);
+				}
+				22%{
+					transform: translateX(-7px);
+				}
+				24%{
+					transform: translateX(7px);
+				}
+				25%{
+					transform: translateX(-2px);
+				}
+				26%{
+					transform: translateX(2px);
+				}
+				27%{
+					transform: translateX(0px);
+				}
+			}
+			
+			@keyframes  down{
+				0%{
+					transform: translateY(0);
+					opacity: 1;
+				}
+				100%{
+					transform: translateY(260px);
+					opacity: 0;
+				}
+			}
+			
+			
+			*{
+				padding: 0;
+				margin: 0;
+			}
+			button{
+				border: none;
+				outline: none;
+			}
+			.box{
+				width: 667px;
+				margin: 0 auto;
+				border: 1px solid #999;
+				padding: 0 6px;
+			}
+			.content:after{
+				content: '';
+				display: block;
+				clear: both;
+			}
+			.content>div{
+				float: left;
+				width: 162px;
+				height: 282px;
+				background: url(img/bg.jpg)no-repeat;
+			}
+			.xs h4{
+				height: 30px;
+				line-height: 30px;
+				font-size: 14px;
+				color: #636b52;
+				
+				border-bottom: 2px solid #a0a0a4;
+			}
+			.content>div div{
+				width: 100%;
+				height: 100%;
+				background: #fff;
+			}
+			.content>div div p:nth-of-type(1) span{
+				background: #ded6e7;
+				font-size: 12px;
+			}
+			.content>div div p:nth-of-type(2){
+				font-size: 12px;
+			}
+			.content>div div p:nth-of-type(4){
+				color: #bdadbd;
+			}
+			.content>div div p:nth-of-type(4) span{
+				color: #bd214a;
+			}
+			.content .active{
+				animation: lr 2s linear forwards;
+			}
+			.content .active div{
+				animation: down 2s 2s linear forwards;
+			}
+		</style>
+	</head>
+	<body>
+		
+		<div class="box">
+			<div class="xs">
+				<h4>限购时间</h4>
+				<div class="content">
+					<!-- <div>
+						<div>
+							<p>
+								<span>2019:201021</span>
+								<button type="button">确定</button>
+							</p>
+							<p>剩余时间：00：00：000</p>
+							<img src="img/1.png" >
+							<p>
+								不出门哈弗回房间覅胡椒粉厦股份反应热往父
+							</p>
+							<p>
+								抢购价：<span>33333</span>
+							</p>
+						</div>
+					</div> -->
+				</div>
+			</div>
+			<div class="xj">
+				
+			</div>
+			
+		</div>
+		
+		
+		<script type="text/javascript">
+			var content = $('.content')[0];
+			var str = '';
+			
+			for(var i=0;i<oData.length;i++){			
+				var newDiv = document.createElement('div');
+				newDiv.innerHTML = `
+									<div>
+										<p>
+											<span>${oData[i].endTime}</span>
+											<button type="button">确定</button>
+										</p>
+										<p>剩余时间：00：00：000</p>
+										<img src="${oData[i].iamge}" >
+										<p>
+											${oData[i].dec}
+										</p>
+										<p>
+											抢购价：<span>￥${oData[i].price}</span>
+										</p>
+									</div>
+									`;
+				
+				var btn = $('button',newDiv)[0];
+				
+				bind(btn,'click',function(){
+					
+					// 调用倒计时函数
+					
+					var pr = prev(this).innerHTML;
+					var newDiv = this.parentNode.parentNode.parentNode;	
+					var p = next(this.parentNode);	
+						
+					var timer = setInterval(function(){							
+						countDown({
+							future:pr,
+							success:function(data){
+								// console.log(data)
+								if(data.s < 0){
+									clearInterval(timer);
+									addClass(newDiv,'active');									
+								}else{
+									p.innerHTML = '剩余时间：'+data.hours+'：'+data.min+'：'+data.s;
+								}
+							}
+						})
+						
+					},1000)
+					
+				})
+				content.appendChild(newDiv);
+			}
+			
+			
+			
+		</script>
+	</body>
+</html>
